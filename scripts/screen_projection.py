@@ -23,15 +23,8 @@ class ScreenProjection:
                 frame = cv2.imdecode(np.frombuffer(image_bytes, dtype=np.uint8), cv2.IMREAD_COLOR)
                 cv2.imshow("Screen Mirroring", frame)
                 cv2.waitKey(1)
-    def capture_screen(self):
-        # Capture the screen from PC/laptop
-        print("Capturing screen")
-        # Placeholder for capturing the screen using appropriate library or tool
-        captured_screen = None
-        return captured_screen
+    
 
 if __name__ == "__main__":
     screen_projection = ScreenProjection()
     screen_projection.start_screen_mirroring()
-    captured_screen = screen_projection.capture_screen()
-    print("Captured screen:", captured_screen)
