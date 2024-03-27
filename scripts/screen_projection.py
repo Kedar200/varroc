@@ -2,29 +2,37 @@ import sys
 import os
 import cv2
 import numpy as np
-# Add the parent directory to the sys.path
+from PySide6.QtGui import QImage, QPixmap
+from PySide6.QtWidgets import QApplication, QLabel, QVBoxLayout, QWidget
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from utils.adb_utils import ADBUtils
 
 class ScreenProjection:
-    def __init__(self):
+    def __init__(self,device):
         # Initialize any necessary parameters or resources
-        pass
+        self.device=device
+
 
     def start_screen_mirroring(self):
-        # Start screen mirroring from mobile device to PC/laptop
-        adb_utils = ADBUtils()
-        adb_utils.connect_to_device()
-        
-        # Start screen mirroring from mobile device to PC/laptop
+        app = QApplication(sys.argv)
+        window = QWidget()
+        layout = QVBoxLayout()
+        label = QLabel()
+        layout.addWidget(label)
+        window.setLayout(layout)
+        window.show()
         while True:
-            image_bytes = adb_utils.device.screencap()
-            if len(image_bytes)>0:
+            image_bytes = self.device.screencap()
+            if len(image_bytes) > 0:
                 frame = cv2.imdecode(np.frombuffer(image_bytes, dtype=np.uint8), cv2.IMREAD_COLOR)
-                cv2.imshow("Screen Mirroring", frame)
-                cv2.waitKey(1)
-    
+                if frame is not None:
+                    ratio = 50 / 200
+                    image = QImage(frame, frame.shape[1], frame.shape[0], frame.shape[1] * 3, QImage.Format_BGR888)
+                    pix = QPixmap(image)
+                    pix.setDevicePixelRatio(1 / ratio)
+                    label.setPixmap(pix)
+            app.processEvents()
+                # cv2.imshow("Screen Mirroring", frame)
+                # cv2.resizeWindow("Screen Mirroring", 500,900) 
+                # cv2.waitKey(1)
 
-if __name__ == "__main__":
-    screen_projection = ScreenProjection()
-    screen_projection.start_screen_mirroring()
