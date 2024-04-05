@@ -12,19 +12,13 @@ class MobileController:
         self.adb_utils.connect_to_device()
 
 
-    def tap_on_element(self):
+    def tap_on_element(self,x,y):
 
-        self.adb_utils.device.shell(f"input tap 800 400")
+        self.adb_utils.device.shell(f"input tap {x} {y}")
 
 
-    def scroll_down(self):
+    def swipe(self,x1,y1,x2,y2,time):
         # Simulate scrolling down on the mobile device
-        self.adb_utils.device.shell(f"input swipe 500 500 500 100 100")
+        self.adb_utils.device.shell(f"input swipe {x1} {y1} {x2} {y2} {time}")
 
 
-
-if __name__ == "__main__":
-    # Example usage
-    mobile_controller = MobileController()
-    # mobile_controller.tap_on_element()
-    mobile_controller.scroll_down()

@@ -21,6 +21,7 @@ class ScreenProjection:
         layout.addWidget(label)
         window.setLayout(layout)
         window.show()
+        i=0
         while True:
             image_bytes = self.device.screencap()
             if len(image_bytes) > 0:
@@ -32,7 +33,5 @@ class ScreenProjection:
                     pix.setDevicePixelRatio(1 / ratio)
                     label.setPixmap(pix)
             app.processEvents()
-                # cv2.imshow("Screen Mirroring", frame)
-                # cv2.resizeWindow("Screen Mirroring", 500,900) 
-                # cv2.waitKey(1)
+            i=i+1
 

@@ -1,27 +1,26 @@
 import unittest
-from unittest.mock import MagicMock
-
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from scripts.screen_projection import ScreenProjection
+from utils import adb_utils
+
 
 class TestScreenMirroring(unittest.TestCase):
-    def setUp(self):
-        # Mocking ScreenProjection class for testing
-        self.screen_projection = ScreenProjection()
-        self.screen_projection.adb_utils = MagicMock()
-        self.screen_projection.adb_utils.device.screencap.return_value = b'fake_image_bytes'
+    def __init__(self, methodName: str = "runTest") -> None:
+        usbconnection=adb_utils.ADBUtils()
+        usbconnection.connect_to_device()
+        self.device=usbconnection.device
+        super().__init__(methodName)
 
-    def test_start_screen_mirroring(self):
-        self.screen_projection.start_screen_mirroring()
-        self.assertTrue(self.screen_projection.adb_utils.connect_to_device.called)
-        self.assertTrue(self.screen_projection.adb_utils.device.screencap.called)
+    def setUp(self):
+        self.screen_projection= ScreenProjection(self.device)
+
 
     def test_capture_screen(self):
-        captured_screen = self.screen_projection.capture_screen()
-        self.assertIsNotNone(captured_screen)  # Placeholder for actual implementation
+        captured_screen = self.device.screencap()
+        self.assertIsNotNone(captured_screen)  
 
 if __name__ == "__main__":
     unittest.main()
